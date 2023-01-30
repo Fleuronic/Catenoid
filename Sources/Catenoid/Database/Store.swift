@@ -24,7 +24,10 @@ public extension Store<ReadWrite> {
 private extension Store {
 	static var url: URL {
 		get throws {
-			try FileManager.default
+			print(try FileManager.default
+				.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+				.appendingPathComponent(.database))
+			return try FileManager.default
 				.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
 				.appendingPathComponent(.database)
 		}
