@@ -1,9 +1,8 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
+import Schemata
 import PersistDB
-import struct Schemata.None
-import protocol Schemata.AnyModel
-import protocol Catena.Model
+import Catena
 
 public protocol Database<Store> {
 	associatedtype Store

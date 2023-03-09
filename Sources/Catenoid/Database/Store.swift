@@ -1,11 +1,9 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
+import Foundation
 import PersistDB
-import struct Schemata.None
-import struct Foundation.URL
-import class Foundation.FileManager
-import protocol Schemata.AnyModel
-import protocol Catena.Model
+import Schemata
+import Catena
 
 public extension Store<ReadWrite> {
 	static func open(for types: [AnyModel.Type]) async throws -> Store<ReadWrite> {
