@@ -22,7 +22,6 @@ public extension Database<PersistDB.Store<ReadWrite>> {
 }
 
 public extension Database<PersistDB.Store<ReadWrite>> {
-	@discardableResult
 	func insert<Model: Catena.Model>(_ model: Model) async -> Model.ID {
 		await store.insert(.init(model.identifiedValueSet)).value
 	}
