@@ -7,7 +7,8 @@ import Catena
 
 public extension Store<ReadWrite> {
 	static func open(for types: [AnyModel.Type]) async throws -> Store<ReadWrite> {
-		try await Self
+		print(try url)
+		return try await Self
 			.open(libraryNamed: .database, for: types)
 			.asyncThrowingStream
 			.first { _ in true }!
@@ -22,10 +23,7 @@ public extension Store<ReadWrite> {
 private extension Store {
 	static var url: URL {
 		get throws {
-			print(try FileManager.default
-				.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-				.appendingPathComponent(.database))
-			return try FileManager.default
+			try FileManager.default
 				.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
 				.appendingPathComponent(.database)
 		}
