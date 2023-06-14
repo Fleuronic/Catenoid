@@ -12,10 +12,19 @@ public extension Result where Failure == Never {
 }
 
 // MARK: -
+public extension AsyncStream {
+	var value: Element {
+		get async {
+			await first { _ in true }!
+		}
+	}
+}
+
+// MARK: -
 public extension SignalProducer where Error == Never {
 	var value: Value {
 		get async {
-			await asyncStream.first { _ in true }!
+			await asyncStream.value
 		}
 	}
 }
