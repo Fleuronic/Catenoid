@@ -11,7 +11,7 @@ public extension Store<ReadWrite> {
 		return try await Self
 			.open(libraryNamed: .database, for: types)
 			.asyncThrowingStream
-			.first { _ in true }!
+			.value
 	}
 
 	static func destroy() throws {

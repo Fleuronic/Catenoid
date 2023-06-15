@@ -21,6 +21,15 @@ public extension AsyncStream {
 }
 
 // MARK: -
+public extension AsyncThrowingStream {
+    var value: Element {
+        get async throws {
+            try await first { _ in true }!
+        }
+    }
+}
+
+// MARK: -
 public extension SignalProducer where Error == Never {
 	var value: Value {
 		get async {
