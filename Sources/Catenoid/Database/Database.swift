@@ -25,7 +25,7 @@ public extension Database<PersistDB.Store<ReadWrite>> {
 
 	func insert<Fields: Catena.Fields>(_ model: Fields.Model, returning fields: Fields.Type) async -> Result<Fields> {
 		let id = await insert(model).value
-		return await fetch(\.id == id, returning: fields).map(\.first!)
+		return await fetch(fields, where: Fields.Model.idKeyPath == id).map(\.first!)
 	}
 
 	func insert<Model: Catena.Model>(_ models: [Model]) async -> Result<[Model.ID]> {
@@ -35,20 +35,16 @@ public extension Database<PersistDB.Store<ReadWrite>> {
 	func insert<Fields: Catena.Fields>(_ models: [Fields.Model], returning fields: Fields.Type) async -> Result<[Fields]> {
 		let ids = await insert(models).value
 		let predicate = ids.reduce(Fields.Model.all.predicates.first!) {
-			$0 || \.id == $1
+			$0 || Fields.Model.idKeyPath == $1
 		}
-		return await fetch(predicate, returning: fields)
-	}
-
-	func fetch<Model: Catena.Model>(_ type: Model.Type, with id: Model.ID) async -> Result<Model.ID?> {
-		await fetch(where: \Model.id == id).map(\.first)
+		return await fetch(fields, where: predicate)
 	}
 
 	func fetch<Model: Catena.Model>(where predicate: Predicate<Model>? = nil) async -> Result<[Model.ID]> {
-		await fetch(predicate, returning: IDFields<Model>.self).map { $0.map(\.id) }
+		await fetch(IDFields<Model>.self, where: predicate).map { $0.map(\.id) }
 	}
 
-	func fetch<Fields: Catena.Fields>(_ predicate: Predicate<Fields.Model>? = nil, returning fields: Fields.Type) async -> Result<[Fields]> {
+	func fetch<Fields: Catena.Fields>(_ fields: Fields.Type, where predicate: Predicate<Fields.Model>? = nil) async -> Result<[Fields]> {
 		let query = predicate.map { Query().filter($0) } ?? Fields.Model.all
 		return .success(await store.fetch(query).value.values)
 	}
@@ -60,7 +56,7 @@ public extension Database<PersistDB.Store<ReadWrite>> {
 
 	func update<Fields: Catena.Fields>(_ valueSet: ValueSet<Fields.Model>, where predicate: Predicate<Fields.Model>? = nil, returning fields: Fields.Type) async -> Result<[Fields]> {
         await update(valueSet, where: predicate).asyncFlatMap { _ in
-            await fetch(predicate, returning: fields)
+			await fetch(fields, where: predicate)
         }
 	}
 
@@ -69,16 +65,16 @@ public extension Database<PersistDB.Store<ReadWrite>> {
 	}
 
 	func update<Fields: Catena.Fields>(_ valueSet: ValueSet<Fields.Model>, with id: Fields.Model.ID, returning fields: Fields.Type) async -> Result<Fields> {
-		await update(valueSet, where: \.id == id, returning: fields).map(\.first!)
+		await update(valueSet, where: Fields.Model.idKeyPath == id, returning: fields).map(\.first!)
 	}
 
-    func delete<Model: Catena.Model>(_ type: Model.Type, where predicate: Predicate<Model>? = nil) async -> Result<[Model.ID]> {
+	func delete<Model: Catena.Model>(_ type: Model.Type, where predicate: Predicate<Model>? = nil) async -> Result<[Model.ID]> {
         store.delete(.init(predicate)).start()
         return await fetch(where: predicate)
 	}
 
     func delete<Model: Catena.Model>(_ type: Model.Type, with id: Model.ID) async -> Result<Model.ID?> {
-        await delete(type, where: \.id == id).map(\.first)
+        await delete(type, where: \Model.id == id).map(\.first)
 	}
     
     static func createStore() async throws -> Store {
