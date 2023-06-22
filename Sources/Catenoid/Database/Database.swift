@@ -50,7 +50,7 @@ public extension Database<PersistDB.Store<ReadWrite>> {
 	}
 
 	func update<Model: Catena.Model>(_ valueSet: ValueSet<Model>, where predicate: Predicate<Model>? = nil) async -> Result<[Model.ID]> {
-        await store.update(.init(predicate: predicate, valueSet: valueSet)).map { _ in }.value
+        await store.update(.init(predicate: predicate, valueSet: valueSet)).complete()
 		return await fetch(where: predicate)
 	}
 
@@ -69,7 +69,7 @@ public extension Database<PersistDB.Store<ReadWrite>> {
 	}
 
 	func delete<Model: Catena.Model>(_ type: Model.Type, where predicate: Predicate<Model>? = nil) async -> Result<[Model.ID]> {
-        store.delete(.init(predicate)).start()
+        await store.delete(.init(predicate)).complete()
         return await fetch(where: predicate)
 	}
 
