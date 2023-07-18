@@ -42,7 +42,7 @@ public extension SignalProducer where Value == Never, Error == Never {
 	func complete() async {
 		var disposable: Disposable?
 
-		try await withCheckedContinuation { continuation in
+		await withCheckedContinuation { continuation in
 			disposable = start { event in
 				switch event {
 				case .completed:
