@@ -17,8 +17,8 @@ public protocol Database<Store>: Storage {
 
 // MARK: -
 public extension Database<PersistDB.Store<ReadWrite>> {
-    typealias Result<Resource> = Swift.Result<Resource, Never>
-    
+	typealias Result<Resource> = Swift.Result<Resource, Never>
+
 	func insert<Model: Catena.Model>(_ model: Model) async -> Result<Model.ID> {
 		.success(await store.insert(.init(model.identifiedValueSet)).value)
 	}
@@ -37,7 +37,7 @@ public extension Database<PersistDB.Store<ReadWrite>> {
 	}
 
 	func update<Model: Catena.Model>(_ valueSet: ValueSet<Model>, where predicate: Predicate<Model>? = nil) async -> Result<[Model.ID]> {
-        await store.update(.init(predicate: predicate, valueSet: valueSet)).complete()
+		await store.update(.init(predicate: predicate, valueSet: valueSet)).complete()
 		return await fetch(where: predicate)
 	}
 
@@ -46,19 +46,19 @@ public extension Database<PersistDB.Store<ReadWrite>> {
 	}
 
 	func delete<Model: Catena.Model>(_ type: Model.Type, where predicate: Predicate<Model>? = nil) async -> Result<[Model.ID]> {
-        await store.delete(.init(predicate)).complete()
-        return await fetch(where: predicate)
+		await store.delete(.init(predicate)).complete()
+		return await fetch(where: predicate)
 	}
 
-    func delete<Model: Catena.Model>(_ type: Model.Type, with id: Model.ID) async -> Result<Model.ID?> {
-        await delete(type, where: \.id == id).map(\.first)
+	func delete<Model: Catena.Model>(_ type: Model.Type, with id: Model.ID) async -> Result<Model.ID?> {
+		await delete(type, where: \.id == id).map(\.first)
 	}
 
 	func delete<Model: Catena.Model>(_ type: Model.Type, with ids: [Model.ID]) async -> Result<[Model.ID]> {
 		await delete(type, where: ids.contains(\.id))
 	}
 
-    static func createStore() async throws -> Store {
-        try await .open(for: types)
-    }
+	static func createStore() async throws -> Store {
+		try await .open(for: types)
+	}
 }
