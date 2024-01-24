@@ -32,7 +32,7 @@ public extension Database<PersistDB.Store<ReadWrite>> {
 	}
 
 	func fetch<Fields: Catena.Fields>(_ fields: Fields.Type, with id: Fields.Model.ID) async -> Result<[Fields]> {
-		fetch(fields, where: Model.idKeyPath == id)
+		await fetch(fields, where: \.id == id)
 	}
 
 	func fetch<Fields: Catena.Fields>(_ fields: Fields.Type, where predicate: Predicate<Fields.Model>? = nil) async -> Result<[Fields]> {
