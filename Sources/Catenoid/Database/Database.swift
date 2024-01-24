@@ -31,6 +31,10 @@ public extension Database<PersistDB.Store<ReadWrite>> {
 		await fetch(IDFields<Model>.self, where: predicate).map { $0.map(\.id) }
 	}
 
+	func fetch<Fields: Catena.Fields>(_ fields: Fields.Type, with id: Fields.Model.ID) async -> Result<[Fields]> {
+		fetch(fields, where: Model.idKeyPath == id)
+	}
+
 	func fetch<Fields: Catena.Fields>(_ fields: Fields.Type, where predicate: Predicate<Fields.Model>? = nil) async -> Result<[Fields]> {
 		let query = predicate.map { Query().filter($0) } ?? Fields.Model.all
 		return .success(await store.fetch(query).value.values)
