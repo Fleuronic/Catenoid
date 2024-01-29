@@ -1,8 +1,8 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
+import Catena
 import Schemata
 import PersistDB
-import Catena
 import CollectionConcurrencyKit
 
 public protocol Database<Store>: Storage {
