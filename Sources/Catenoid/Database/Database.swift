@@ -25,7 +25,8 @@ public extension Database<PersistDB.Store<ReadWrite>> {
 
 	// MARK: Storage
 	func insert<Model: Catena.Model>(_ model: Model) async -> Result<Model.ID> {
-		.success(await store.insert(.init(model.identifiedValueSet)).value)
+		let valueSet = model.valueSet.update(with: [Model.idKeyPath == model.id])
+		return .success(await store.insert(.init(valueSet)).value)
 	}
 
 	func insert<Model: Catena.Model>(_ models: [Model]) async -> Result<[Model.ID]> {
