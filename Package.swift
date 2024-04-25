@@ -17,17 +17,11 @@ let package = Package(
 			targets: ["Catenoid"]
 		)
 	],
-	dependencies: [
-		.package(url: "https://github.com/Fleuronic/Catena", branch: "main"),
-		.package(url: "https://github.com/JohnSundell/CollectionConcurrencyKit.git", from: "0.1.0")
-	],
+	dependencies: [.package(url: "https://github.com/Fleuronic/Catenary", branch: "main")],
 	targets: [
 		.target(
 			name: "Catenoid",
-			dependencies: [
-				"Catena",
-				"CollectionConcurrencyKit"
-			]
+			dependencies: ["Catenary"]
 		)
 	]
 )
