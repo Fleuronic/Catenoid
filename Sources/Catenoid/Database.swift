@@ -6,7 +6,7 @@ import struct Catena.IDFields
 import protocol Catena.Fields
 import protocol Schemata.AnyModel
 
-public protocol Database<Store>: Storage, Sendable {
+public protocol Database<Store>: Storage, Sendable where StorageError == Never {
 	associatedtype Store
 
 	var store: Store { get }
@@ -18,7 +18,7 @@ public protocol Database<Store>: Storage, Sendable {
 
 // MARK: -
 public extension Database<Store<ReadWrite>> {
-	typealias Result<Resource> = Swift.Result<Resource, Never>
+	typealias Result<Resource> = Swift.Result<Resource, StorageError>
 
 	static func createStore() async throws -> Store {
 		try await .open(for: types)
