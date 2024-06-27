@@ -1,6 +1,7 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
-import ReactiveSwift
+import struct ReactiveSwift.SignalProducer
+import protocol ReactiveSwift.Disposable
 
 public extension Result where Failure == Never {
 	var value: Success {
@@ -22,11 +23,11 @@ public extension AsyncStream {
 
 // MARK: -
 public extension AsyncThrowingStream {
-    var value: Element {
-        get async throws {
-            try await first { _ in true }!
-        }
-    }
+	var value: Element {
+		get async throws {
+			try await first { _ in true }!
+		}
+	}
 }
 
 // MARK: -

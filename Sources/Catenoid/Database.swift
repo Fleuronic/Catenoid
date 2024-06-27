@@ -1,0 +1,42 @@
+// Copyright © Fleuronic LLC. All rights reserved.
+
+import PersistDB
+
+import struct Catena.IDFields
+import protocol Catena.Fields
+import protocol Schemata.AnyModel
+
+public protocol Database<Store>: Storage, Sendable {
+	associatedtype Store
+
+	var store: Store { get }
+
+	static var types: [AnyModel.Type] { get }
+
+	mutating func clear() async throws
+}
+
+// MARK: -
+public extension Database<Store<ReadWrite>> {
+	typealias Result<Resource> = Swift.Result<Resource, Never>
+
+	static func createStore() async throws -> Store {
+		try await .open(for: types)
+	}
+
+	// MARK: Storage
+	func insert<Model: Catenoid.Model>(_ model: Model) async -> Result<Model.ID> where Model.ID == Model.IdentifiedModel.ID {
+		let valueSet = model.valueSet.update(with: [Model.IdentifiedModel.idKeyPath == model.id])
+		return await .success(store.insert(.init(valueSet)).value)
+	}
+
+	func fetch<Fields: Catenoid.Fields>(_ fields: Fields.Type, where predicate: Predicate<Fields.Model>? = nil) async -> Result<[Fields]> {
+		let query = predicate.map { Query().filter($0) } ?? Fields.Model.all
+		return await .success(store.fetch(query).value.values)
+	}
+
+	func delete<Model: Catenoid.Model>(_ type: Model.Type, where predicate: Predicate<Model.IdentifiedModel>? = nil) async -> Result<[Model.ID]> where Model.ID == Model.IdentifiedModel.ID {
+		await store.delete(.init(predicate)).complete()
+		return await fetch(IDFields<Model.IdentifiedModel>.self, where: predicate).map { $0.map(\.id) }
+	}
+}
