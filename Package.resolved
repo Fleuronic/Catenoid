@@ -1,5 +1,15 @@
 {
+  "originHash" : "a49ddfeb147a4a99ec9148fd4e350434169ab7aea47ddf85a09e3930cf962217",
   "pins" : [
+    {
+      "identity" : "catena",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Fleuronic/Catena",
+      "state" : {
+        "branch" : "main",
+        "revision" : "ad9f4396551a605a1bcea5b977393b7761638161"
+      }
+    },
     {
       "identity" : "differ",
       "kind" : "remoteSourceControl",
@@ -64,5 +74,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
