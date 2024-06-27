@@ -1,4 +1,4 @@
-// swift-tools-version:5.7
+// swift-tools-version:5.10
 // Copyright © Fleuronic LLC. All rights reserved.
 
 import PackageDescription
@@ -18,7 +18,7 @@ let package = Package(
 		)
 	],
 	dependencies: [
-		.package(path: "../../../Catena"),
+        .package(url: "https://github.com/Fleuronic/Catena", branch: "main"),
 		.package(url: "https://github.com/Fleuronic/Schemata", branch: "master"),
 		.package(url: "https://github.com/Fleuronic/PersistDB", branch: "master")
 	],
