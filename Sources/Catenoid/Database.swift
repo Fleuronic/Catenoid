@@ -30,13 +30,14 @@ public extension Database<Store<ReadWrite>> {
 		return await .success(store.insert(.init(valueSet)).value)
 	}
 
-	func fetch<Fields: Catenoid.Fields>(_ fields: Fields.Type, where predicate: Predicate<Fields.Model>? = nil) async -> Result<[Fields]> {
+	func fetch<Fields: Catenoid.Fields>(where predicate: Predicate<Fields.Model>? = nil) async -> Result<[Fields]> {
 		let query = predicate.map { Query().filter($0) } ?? Fields.Model.all
 		return await .success(store.fetch(query).value.values)
 	}
 
 	func delete<Model: Catenoid.Model>(_ type: Model.Type, where predicate: Predicate<Model.IdentifiedModel>? = nil) async -> Result<[Model.ID]> where Model.ID == Model.IdentifiedModel.ID {
 		await store.delete(.init(predicate)).complete()
-		return await fetch(IDFields<Model.IdentifiedModel>.self, where: predicate).map { $0.map(\.id) }
+		let fields: Result<[IDFields<Model.IdentifiedModel>]> = await fetch(where: predicate)
+		return fields.map { $0.map(\.id) }
 	}
 }
