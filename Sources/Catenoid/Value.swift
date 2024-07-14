@@ -14,25 +14,25 @@ public extension Result where Failure == Never {
 
 // MARK: -
 public extension AsyncStream {
-	var value: Element {
+	var value: Element? {
 		get async {
-			await first { _ in true }!
+			await first { _ in true }
 		}
 	}
 }
 
 // MARK: -
 public extension AsyncThrowingStream {
-	var value: Element {
+	var value: Element? {
 		get async throws {
-			try await first { _ in true }!
+			try await first { _ in true }
 		}
 	}
 }
 
 // MARK: -
 public extension SignalProducer where Error == Never {
-	var value: Value {
+	var value: Value? {
 		get async {
 			await asyncStream.value
 		}

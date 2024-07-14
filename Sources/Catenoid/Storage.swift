@@ -13,7 +13,7 @@ public protocol Storage {
 
 public extension Storage {
 	func insert<Model: Catenoid.Model>(_ models: [Model]) async -> Result<[Model.ID], StorageError> where Model.ID == Model.IdentifiedModel.ID, StorageError == Never {
-		await .success(models.concurrentMap(insert).map(\.value))
+		await .success(models.asyncMap(insert).map(\.value))
 	}
 
 	func delete<Model: Catenoid.Model>(_ type: Model.Type, with ids: [Model.ID]) async -> Result<[Model.ID], StorageError> where Model.ID == Model.IdentifiedModel.ID, StorageError == Never {
