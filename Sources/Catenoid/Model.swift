@@ -5,7 +5,7 @@ import protocol PersistDB.Model
 import protocol Schemata.ModelValue
 import protocol Identity.Identifiable
 
-public protocol Model {
+public protocol Model: Sendable where IdentifiedModel.RawIdentifier: Sendable {
 	associatedtype ID
 	associatedtype IdentifiedModel: PersistDB.Model, Identifiable
 
