@@ -7,7 +7,7 @@ import protocol Identity.Identifiable
 
 public protocol Model: Sendable where IdentifiedModel.RawIdentifier: Sendable {
 	associatedtype ID
-	associatedtype IdentifiedModel: PersistDB.Model, Identifiable
+	associatedtype IdentifiedModel: PersistDB.Model, Identifiable, Sendable
 
 	var id: ID { get }
 	var valueSet: ValueSet<IdentifiedModel> { get }
