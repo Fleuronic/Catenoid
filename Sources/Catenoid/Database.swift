@@ -38,7 +38,10 @@ public extension Database<Store<ReadWrite>> {
 			groupedBy: .init(.init(Fields.Model.idKeyPath))
 		)
 		
-		let resultSet: ResultSet<Fields.Model.ID, Fields> = await store.fetch(query).value!
+		guard let resultSet: ResultSet<Fields.Model.ID, Fields> = await store.fetch(query).value else {
+			return .success([])
+		}
+
 		let values = resultSet.groups.map { group in
 			let values = group.values
 			let fields = values.first!
@@ -48,8 +51,12 @@ public extension Database<Store<ReadWrite>> {
 		return .success(values)
 	}
 
-	func delete<Model: Catenoid.Model>(_ type: Model.Type, where predicate: Predicate<Model.IdentifiedModel>? = nil) async -> Result<[Model.ID]> where Model.ID == Model.IdentifiedModel.ID {
+	func delete<Model: Catenoid.Model>(_ type: Model.Type, with ids: [Model.ID] = []) async -> Result<[Model.ID]> where Model.ID == Model.IdentifiedModel.ID {
+		guard !ids.isEmpty else { return .success(ids) }
+
+		let predicate = ids.contains(Model.IdentifiedModel.idKeyPath)
 		await store.delete(.init(predicate)).complete()
+
 		let fields: Result<[IDFields<Model.IdentifiedModel>]> = await fetch(where: predicate)
 		return await fields.map { $0.map(\.id) }
 	}
