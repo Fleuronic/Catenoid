@@ -41,15 +41,13 @@ public extension SignalProducer where Error == Never {
 
 public extension SignalProducer where Value == Never, Error == Never {
 	func complete() async {
-		var disposable: Disposable?
-
 		await withCheckedContinuation { continuation in
-			disposable = start { event in
+			start { event in
 				switch event {
 				case .completed:
 					continuation.resume()
-				case .interrupted:
-					disposable?.dispose()
+				default:
+					break
 				}
 			}
 		}

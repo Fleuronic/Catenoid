@@ -21,7 +21,7 @@ let package = Package(
         .package(url: "https://github.com/Fleuronic/Catena", branch: "main"),
 		.package(url: "https://github.com/Fleuronic/Schemata", branch: "master"),
 		.package(url: "https://github.com/Fleuronic/PersistDB", branch: "master"),
-		.package(url: "https://github.com/ReactiveCocoa/ReactiveSwift.git", branch: "swift-concurrency"),
+		.package(url: "https://github.com/Fleuronic/ReactiveSwift.git", branch: "swift-concurrency"),
 	],
 	targets: [
 		.target(
