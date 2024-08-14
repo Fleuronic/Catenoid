@@ -6,7 +6,3 @@ import protocol PersistDB.ModelProjection
 public protocol Fields: Catena.Fields, ModelProjection {
 	static func merge(lhs: Self, rhs: Self) -> Self
 }
-
-public extension Fields {
-	static func merge(lhs: Self, rhs: Self) -> Self { lhs }
-}
