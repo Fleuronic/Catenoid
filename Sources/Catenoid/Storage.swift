@@ -2,8 +2,9 @@
 
 import struct PersistDB.Predicate
 import protocol Catena.Fields
+import protocol Schemata.ModelProjection
 
-public protocol Storage {
+public protocol Storage: Sendable {
 	associatedtype StorageError: Error
 
 	func insert<Model: Catenoid.Model>(_ model: Model) async -> Result<Model.ID, StorageError> where Model.ID == Model.IdentifiedModel.ID
@@ -13,6 +14,6 @@ public protocol Storage {
 
 public extension Storage {
 	func insert<Model: Catenoid.Model>(_ models: [Model]) async -> Result<[Model.ID], StorageError> where Model.ID == Model.IdentifiedModel.ID, StorageError == Never {
-		await .success(models.asyncMap(insert).map(\.value))
+		await .success(models.concurrentMap { await insert($0) }.map(\.value))
 	}
 }
