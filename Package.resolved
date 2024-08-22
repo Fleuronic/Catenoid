@@ -1,5 +1,5 @@
 {
-  "originHash" : "ab462eb4d36320b74b49582b45d87b11a19690ce4c93863ce8edc3a0f1a7dbea",
+  "originHash" : "6bcb9d7d6f00174e4bec87d6778143773562d7480eb63e4547fe789c8f8ede2c",
   "pins" : [
     {
       "identity" : "catena",
@@ -7,7 +7,7 @@
       "location" : "https://github.com/Fleuronic/Catena",
       "state" : {
         "branch" : "main",
-        "revision" : "3dc5775107f755e3162232a10c3eaa9ff39e990e"
+        "revision" : "e01565976a800ef370751b685d4e06a637b352f3"
       }
     },
     {
@@ -25,7 +25,7 @@
       "location" : "https://github.com/Fleuronic/Identity",
       "state" : {
         "branch" : "master",
-        "revision" : "e8d3194295dcaefdef948420036f7564808ed308"
+        "revision" : "152f96ff2f828c56363d7ab089b81c80b6cbf1ca"
       }
     },
     {
@@ -34,7 +34,7 @@
       "location" : "https://github.com/Fleuronic/InitMacro.git",
       "state" : {
         "branch" : "main",
-        "revision" : "9b6feb35607a229194a7c28136d020f6b8ba3238"
+        "revision" : "323cda3658117d4c58d597908365ab5dcb939d2e"
       }
     },
     {
@@ -43,16 +43,16 @@
       "location" : "https://github.com/Fleuronic/PersistDB",
       "state" : {
         "branch" : "master",
-        "revision" : "ae14cfd51163ff1b7215448fbdda312778b2af53"
+        "revision" : "cbd5d1c0c98fbc899ed8f069f7e3ff3ecc769e4f"
       }
     },
     {
       "identity" : "reactiveswift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Fleuronic/ReactiveSwift.git",
+      "location" : "https://github.com/Fleuronic/ReactiveSwift",
       "state" : {
-        "branch" : "swift-concurrency",
-        "revision" : "d5a275b4b3d57872f6a77aa76cd70942baba4d9d"
+        "branch" : "master",
+        "revision" : "2dc9b62ee7a2aff72bab49f5f3f6a71fa09d1537"
       }
     },
     {
@@ -61,7 +61,7 @@
       "location" : "https://github.com/Fleuronic/Schemata",
       "state" : {
         "branch" : "master",
-        "revision" : "73c7bdad1bf9824e468ac3815d1df34b37245ff7"
+        "revision" : "93fb510c3bb9f33d94bebaddb8e072c9553c2844"
       }
     },
     {

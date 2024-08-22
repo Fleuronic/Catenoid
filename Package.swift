@@ -1,4 +1,4 @@
-// swift-tools-version:6.0
+// swift-tools-version:5.10
 // Copyright © Fleuronic LLC. All rights reserved.
 
 import PackageDescription
@@ -7,7 +7,7 @@ let package = Package(
 	name: "Catenoid",
 	platforms: [
 		.iOS(.v13),
-		.macOS(.v10_15),
+		.macOS(.v12),
 		.tvOS(.v13),
 		.watchOS(.v6)
 	],
@@ -21,7 +21,7 @@ let package = Package(
         .package(url: "https://github.com/Fleuronic/Catena", branch: "main"),
 		.package(url: "https://github.com/Fleuronic/Schemata", branch: "master"),
 		.package(url: "https://github.com/Fleuronic/PersistDB", branch: "master"),
-		.package(url: "https://github.com/Fleuronic/ReactiveSwift.git", branch: "swift-concurrency"),
+		.package(url: "https://github.com/Fleuronic/ReactiveSwift", branch: "master"),
 	],
 	targets: [
 		.target(
@@ -33,6 +33,5 @@ let package = Package(
 				"ReactiveSwift"
 			]
 		)
-	],
-	swiftLanguageModes: [.v6]
+	]
 )

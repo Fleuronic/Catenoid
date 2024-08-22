@@ -12,7 +12,7 @@ public extension Identifier where Value.RawIdentifier == UUID {
 }
 
 // MARK: -
-extension Identifier: @retroactive AnyModelValue where Value.RawIdentifier: ModelValue & StringEncodable {
+extension Identifier: AnyModelValue where Value.RawIdentifier: ModelValue & StringEncodable {
 	public static var anyValue: AnyValue {
 		.init(
 			String.value.bimap(
@@ -24,7 +24,7 @@ extension Identifier: @retroactive AnyModelValue where Value.RawIdentifier: Mode
 }
 
 // MARK: -
-extension Identifier: @retroactive ModelValue where Value.RawIdentifier: ModelValue & StringEncodable {
+extension Identifier: ModelValue where Value.RawIdentifier: ModelValue & StringEncodable {
 	public static var value: Schemata.Value<Value.RawIdentifier.Encoded, Self> {
 		Value.RawIdentifier.value.bimap(
 			decode: Self.init(rawValue:),
