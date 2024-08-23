@@ -51,10 +51,12 @@ public extension Database<Store<ReadWrite>> {
 		return .success(values)
 	}
 
-	func delete<Model: Catenoid.Model>(_ type: Model.Type, with ids: [Model.ID] = []) async -> Result<[Model.ID]> where Model.ID == Model.IdentifiedModel.ID {
-		guard !ids.isEmpty else { return .success(ids) }
+	func delete<Model: Catenoid.Model>(_ type: Model.Type, with ids: [Model.ID]? = nil) async -> Result<[Model.ID]> where Model.ID == Model.IdentifiedModel.ID {
+		if let ids, ids.isEmpty {
+			return .success([])
+		}
 
-		let predicate = ids.contains(Model.IdentifiedModel.idKeyPath)
+		let predicate = ids.map { $0.contains(Model.IdentifiedModel.idKeyPath) }
 		await store.delete(.init(predicate)).complete()
 
 		let fields: Result<[IDFields<Model.IdentifiedModel>]> = await fetch(where: predicate)

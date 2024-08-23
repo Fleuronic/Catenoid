@@ -9,7 +9,7 @@ public protocol Storage: Sendable {
 
 	func insert<Model: Catenoid.Model>(_ model: Model) async -> Result<Model.ID, StorageError> where Model.ID == Model.IdentifiedModel.ID
 	func fetch<Fields: Catenoid.Fields>(where predicate: Predicate<Fields.Model>?) async -> Result<[Fields], StorageError>
-	func delete<Model: Catenoid.Model>(_ type: Model.Type, with ids: [Model.ID]) async -> Result<[Model.ID], StorageError> where Model.ID == Model.IdentifiedModel.ID
+	func delete<Model: Catenoid.Model>(_ type: Model.Type, with ids: [Model.ID]?) async -> Result<[Model.ID], StorageError> where Model.ID == Model.IdentifiedModel.ID
 }
 
 public extension Storage {
