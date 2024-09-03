@@ -28,7 +28,7 @@ public extension Database<Store<ReadWrite>> {
 	// MARK: Storage
 	func insert<Model: Catenoid.Model>(_ model: Model) async -> Result<Model.ID> where Model.ID == Model.IdentifiedModel.ID {
 		let valueSet = model.valueSet.update(with: [Model.IdentifiedModel.idKeyPath == model.id])
-		return await .success(store.insert(.init(valueSet)).value ?? model.id)
+		return await .success(store.insert(.init(valueSet)).value!/* ?? model.id*/)
 	}
 
 	func fetch<Fields: Catenoid.Fields>(where predicate: Predicate<Fields.Model>? = nil) async -> Result<[Fields]> {
