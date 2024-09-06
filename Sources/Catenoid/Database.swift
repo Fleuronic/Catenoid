@@ -6,6 +6,7 @@ import struct Catena.IDFields
 import struct Schemata.Projection
 import protocol Catena.Fields
 import protocol Schemata.AnyModel
+import protocol Identity.Identifiable
 
 public protocol Database<Store>: Storage, Sendable where StorageError == Never {
 	associatedtype Store
@@ -51,15 +52,15 @@ public extension Database<Store<ReadWrite>> {
 		return .success(values)
 	}
 
-	func delete<Model: Catenoid.Model>(_ type: Model.Type, with ids: [Model.ID]? = nil) async -> Result<[Model.ID]> where Model.ID == Model.IdentifiedModel.ID {
+	func delete<Model: PersistDB.Model & Identifiable>(_ type: Model.Type, with ids: [Model.ID]? = nil) async -> Result<[Model.ID]> {
 		if let ids, ids.isEmpty {
 			return .success([])
 		}
 
-		let predicate = ids.map { $0.contains(Model.IdentifiedModel.idKeyPath) }
+		let predicate = ids.map { $0.contains(Model.idKeyPath) }
 		await store.delete(.init(predicate)).complete()
 
-		let fields: Result<[IDFields<Model.IdentifiedModel>]> = await fetch(where: predicate)
+		let fields: Result<[IDFields<Model>]> = await fetch(where: predicate)
 		return await fields.map { $0.map(\.id) }
 	}
 }
