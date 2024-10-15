@@ -1,10 +1,10 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
-import struct Catena.IDFields
-import struct Schemata.Projection
-import protocol Schemata.ModelProjection
-import protocol PersistDB.ModelProjection
-import protocol PersistDB.Model
+public import struct Catena.IDFields
+public import struct Schemata.Projection
+public import protocol Schemata.ModelProjection
+public import protocol PersistDB.ModelProjection
+public import protocol PersistDB.Model
 
 extension IDFields: Fields where Model: PersistDB.Model {
 	public static func merge(lhs: Self, rhs: Self) -> Self { lhs }

@@ -1,9 +1,10 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
-import struct PersistDB.ValueSet
-import protocol PersistDB.Model
+public import struct PersistDB.ValueSet
+public import protocol PersistDB.Model
+public import protocol Identity.Identifiable
+
 import protocol Schemata.ModelValue
-import protocol Identity.Identifiable
 
 public protocol Model: Sendable where IdentifiedModel.RawIdentifier: Sendable {
 	associatedtype ID

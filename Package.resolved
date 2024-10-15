@@ -1,5 +1,5 @@
 {
-  "originHash" : "6bcb9d7d6f00174e4bec87d6778143773562d7480eb63e4547fe789c8f8ede2c",
+  "originHash" : "3bc8c5e489a3a3b6b410f74c85f65c136f9f2782b0126b710783a111e4ef1cd6",
   "pins" : [
     {
       "identity" : "catena",
@@ -7,13 +7,13 @@
       "location" : "https://github.com/Fleuronic/Catena",
       "state" : {
         "branch" : "main",
-        "revision" : "e01565976a800ef370751b685d4e06a637b352f3"
+        "revision" : "5469a2422d791770dba2962e6c392db9da4b90ae"
       }
     },
     {
       "identity" : "differ",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/tonyarnold/Differ.git",
+      "location" : "https://github.com/tonyarnold/Differ",
       "state" : {
         "revision" : "5520fda947f1f9777a806389c2ba587219bc0538",
         "version" : "1.4.6"
@@ -25,16 +25,7 @@
       "location" : "https://github.com/Fleuronic/Identity",
       "state" : {
         "branch" : "master",
-        "revision" : "152f96ff2f828c56363d7ab089b81c80b6cbf1ca"
-      }
-    },
-    {
-      "identity" : "initmacro",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Fleuronic/InitMacro.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "323cda3658117d4c58d597908365ab5dcb939d2e"
+        "revision" : "a0a5d99bc543487e3785eb5700e277a2f1fcf4b5"
       }
     },
     {
@@ -43,7 +34,7 @@
       "location" : "https://github.com/Fleuronic/PersistDB",
       "state" : {
         "branch" : "master",
-        "revision" : "cbd5d1c0c98fbc899ed8f069f7e3ff3ecc769e4f"
+        "revision" : "de0375d42e061aa6e22df6358b7177f4c2bc1a2c"
       }
     },
     {
@@ -51,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Fleuronic/ReactiveSwift",
       "state" : {
-        "branch" : "master",
-        "revision" : "2dc9b62ee7a2aff72bab49f5f3f6a71fa09d1537"
+        "branch" : "main",
+        "revision" : "db54c7d9b7cf3ed89962eac4b28a4c05df855956"
       }
     },
     {
@@ -61,16 +52,7 @@
       "location" : "https://github.com/Fleuronic/Schemata",
       "state" : {
         "branch" : "master",
-        "revision" : "93fb510c3bb9f33d94bebaddb8e072c9553c2844"
-      }
-    },
-    {
-      "identity" : "swift-syntax",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-syntax",
-      "state" : {
-        "revision" : "08a2f0a9a30e0f705f79c9cfaca1f68b71bdc775",
-        "version" : "510.0.0"
+        "revision" : "377b9b893d7847e9dfeddd72ee147b4cfa98b301"
       }
     }
   ],

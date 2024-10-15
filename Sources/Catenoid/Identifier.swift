@@ -1,11 +1,11 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
-import struct Identity.Identifier
-import struct Schemata.Value
-import struct Schemata.AnyValue
-import struct Foundation.UUID
-import protocol Schemata.ModelValue
-import protocol Schemata.AnyModelValue
+public import struct Identity.Identifier
+public import struct Schemata.Value
+public import struct Schemata.AnyValue
+public import struct Foundation.UUID
+public import protocol Schemata.ModelValue
+public import protocol Schemata.AnyModelValue
 
 public extension Identifier where Value.RawIdentifier == UUID {
 	static var random: Self { .init(rawValue: .init()) }

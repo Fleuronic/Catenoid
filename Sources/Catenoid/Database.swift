@@ -1,19 +1,20 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
-import PersistDB
+public import PersistDB
 
 import struct Catena.IDFields
-import struct Schemata.Projection
 import protocol Catena.Fields
-import protocol Schemata.AnyModel
-import protocol Identity.Identifiable
+
+public import struct Schemata.Projection
+public import protocol Schemata.AnyModel
+public import protocol Identity.Identifiable
 
 public protocol Database<Store>: Storage, Sendable where StorageError == Never {
 	associatedtype Store
 
 	var store: Store { get }
 
-	static var types: [AnyModel.Type] { get }
+	static var types: [any AnyModel.Type] { get }
 
 	mutating func clear() async throws
 }
@@ -52,7 +53,7 @@ public extension Database<Store<ReadWrite>> {
 		return .success(values)
 	}
 
-	func delete<Model: PersistDB.Model & Identifiable>(_ type: Model.Type, with ids: [Model.ID]? = nil) async -> Result<[Model.ID]> {
+	func delete<Model: PersistDB.Model & Identifiable>(_ type: Model.Type, with ids: [Model.ID]? = nil) async -> Result<[Model.ID]> where Model.RawIdentifier: Sendable {
 		if let ids, ids.isEmpty {
 			return .success([])
 		}

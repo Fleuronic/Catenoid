@@ -1,4 +1,4 @@
-// swift-tools-version:6.0
+// swift-tools-version:5.8
 // Copyright © Fleuronic LLC. All rights reserved.
 
 import PackageDescription
@@ -20,7 +20,7 @@ let package = Package(
 	dependencies: [
 		.package(url: "https://github.com/Fleuronic/Catena", branch: "main"),
 		.package(url: "https://github.com/Fleuronic/Schemata", branch: "master"),
-		.package(url: "https://github.com/Fleuronic/PersistDB", branch: "master"),
+		.package(url: "https://github.com/Fleuronic/PersistDB", branch: "main"),
 		.package(url: "https://github.com/Fleuronic/ReactiveSwift", branch: "main")
 	],
 	targets: [
@@ -33,14 +33,12 @@ let package = Package(
 				"ReactiveSwift"
 			]
 		)
-	],
-	swiftLanguageModes: [.v6]
+	]
 )
 
 for target in package.targets {
 	target.swiftSettings = [
-		.enableUpcomingFeature("ExistentialAny"),
-		.enableUpcomingFeature("InternalImportsByDefault")
+		.enableUpcomingFeature("StrictConcurrency"),
+		.enableExperimentalFeature("AccessLevelOnImport")
 	]
 }
-
