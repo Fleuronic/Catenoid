@@ -4,8 +4,8 @@ public import enum PersistDB.ReadWrite
 public import class PersistDB.Store
 public import protocol Schemata.AnyModel
 
-import struct Foundation.URL
-import class Foundation.FileManager
+public import struct Foundation.URL
+public import class Foundation.FileManager
 
 public extension Store<ReadWrite> {
 	static func open(for types: [any AnyModel.Type]) async throws -> Store<ReadWrite> {

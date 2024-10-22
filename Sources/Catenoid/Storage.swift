@@ -5,7 +5,7 @@ public import protocol PersistDB.Model
 public import protocol Schemata.ModelProjection
 public import protocol Identity.Identifiable
 
-import protocol Catena.Fields
+public import protocol Catena.Fields
 
 public protocol Storage: Sendable {
 	associatedtype StorageError: Error

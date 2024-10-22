@@ -4,7 +4,7 @@ public import struct PersistDB.ValueSet
 public import protocol PersistDB.Model
 public import protocol Identity.Identifiable
 
-import protocol Schemata.ModelValue
+public import protocol Schemata.ModelValue
 
 public protocol Model: Sendable where IdentifiedModel.RawIdentifier: Sendable {
 	associatedtype ID

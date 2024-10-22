@@ -2,12 +2,12 @@
 
 public import PersistDB
 
-import struct Catena.IDFields
-import protocol Catena.Fields
-
 public import struct Schemata.Projection
 public import protocol Schemata.AnyModel
 public import protocol Identity.Identifiable
+
+public import struct Catena.IDFields
+public import protocol Catena.Fields
 
 public protocol Database<Store>: Storage, Sendable where StorageError == Never {
 	associatedtype Store
