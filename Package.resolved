@@ -1,5 +1,4 @@
 {
-  "originHash" : "3bc8c5e489a3a3b6b410f74c85f65c136f9f2782b0126b710783a111e4ef1cd6",
   "pins" : [
     {
       "identity" : "catena",
@@ -7,7 +6,7 @@
       "location" : "https://github.com/Fleuronic/Catena",
       "state" : {
         "branch" : "main",
-        "revision" : "5469a2422d791770dba2962e6c392db9da4b90ae"
+        "revision" : "0886450dc5cc4d2607cd63ce95772e6fb29d7a9f"
       }
     },
     {
@@ -25,7 +24,7 @@
       "location" : "https://github.com/Fleuronic/Identity",
       "state" : {
         "branch" : "master",
-        "revision" : "a0a5d99bc543487e3785eb5700e277a2f1fcf4b5"
+        "revision" : "511c8584d7c0bed3da607156a4d643fd44ca4368"
       }
     },
     {
@@ -34,7 +33,7 @@
       "location" : "https://github.com/Fleuronic/PersistDB",
       "state" : {
         "branch" : "master",
-        "revision" : "de0375d42e061aa6e22df6358b7177f4c2bc1a2c"
+        "revision" : "0d57b231aeef08f015a54e021e46d74b19db761e"
       }
     },
     {
@@ -52,9 +51,9 @@
       "location" : "https://github.com/Fleuronic/Schemata",
       "state" : {
         "branch" : "master",
-        "revision" : "377b9b893d7847e9dfeddd72ee147b4cfa98b301"
+        "revision" : "d50bff691be79b0334e17b394de7dc13528d3944"
       }
     }
   ],
-  "version" : 3
+  "version" : 2
 }
