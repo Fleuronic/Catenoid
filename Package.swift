@@ -7,7 +7,7 @@ let package = Package(
 	name: "Catenoid",
 	platforms: [
 		.iOS(.v13),
-		.macOS(.v12),
+		.macOS(.v10_15),
 		.tvOS(.v13),
 		.watchOS(.v6)
 	],
