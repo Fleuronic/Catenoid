@@ -1,11 +1,10 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
-public import struct PersistDB.Predicate
-public import protocol PersistDB.Model
-public import protocol Schemata.ModelProjection
-public import protocol Identity.Identifiable
-
-public import protocol Catena.Fields
+import struct PersistDB.Predicate
+import protocol PersistDB.Model
+import protocol Schemata.ModelProjection
+import protocol Catena.Fields
+import protocol Identity.Identifiable
 
 public protocol Storage: Sendable {
 	associatedtype StorageError: Error

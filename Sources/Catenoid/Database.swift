@@ -1,13 +1,12 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
-public import PersistDB
+import PersistDB
 
-public import struct Schemata.Projection
-public import protocol Schemata.AnyModel
-public import protocol Identity.Identifiable
-
-public import struct Catena.IDFields
-public import protocol Catena.Fields
+import struct Catena.IDFields
+import struct Schemata.Projection
+import protocol Catena.Fields
+import protocol Schemata.AnyModel
+import protocol Identity.Identifiable
 
 public protocol Database<Store>: Storage, Sendable where StorageError == Never {
 	associatedtype Store

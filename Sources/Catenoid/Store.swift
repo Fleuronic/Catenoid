@@ -1,11 +1,10 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
-public import enum PersistDB.ReadWrite
-public import class PersistDB.Store
-public import protocol Schemata.AnyModel
-
-public import struct Foundation.URL
-public import class Foundation.FileManager
+import enum PersistDB.ReadWrite
+import struct Foundation.URL
+import class PersistDB.Store
+import class Foundation.FileManager
+import protocol Schemata.AnyModel
 
 public extension Store<ReadWrite> {
 	static func open(for types: [any AnyModel.Type]) async throws -> Store<ReadWrite> {
