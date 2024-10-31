@@ -8,7 +8,7 @@ import protocol Catena.Fields
 import protocol Schemata.AnyModel
 import protocol Identity.Identifiable
 
-public protocol Database<Store>: Storage, Sendable where StorageError == Never {
+public protocol Database<Store>: Storage, ResultProviding, Sendable where StorageError == Never {
 	associatedtype Store
 
 	var store: Store { get }
@@ -20,19 +20,17 @@ public protocol Database<Store>: Storage, Sendable where StorageError == Never {
 
 // MARK: -
 public extension Database<Store<ReadWrite>> {
-	typealias Result<Resource> = Swift.Result<Resource, StorageError>
-
 	static func createStore() async throws -> Store {
 		try await .open(for: types)
 	}
 
 	// MARK: Storage
-	func insert<Model: Catenoid.Model>(_ model: Model) async -> Result<Model.ID> where Model.ID == Model.IdentifiedModel.ID {
+	func insert<Model: Catenoid.Model>(_ model: Model) async -> SingleResult<Model.ID> where Model.ID == Model.IdentifiedModel.ID {
 		let valueSet = model.valueSet.update(with: [Model.IdentifiedModel.idKeyPath == model.id])
 		return await .success(store.insert(.init(valueSet)).value!/* ?? model.id*/)
 	}
 
-	func fetch<Fields: Catenoid.Fields>(where predicate: Predicate<Fields.Model>? = nil) async -> Result<[Fields]> {
+	func fetch<Fields: Catenoid.Fields>(where predicate: Predicate<Fields.Model>? = nil) async -> Results<Fields> {
 		let query = Query(
 			predicates: predicate.map { [$0] } ?? [],
 			order: [],
@@ -52,7 +50,7 @@ public extension Database<Store<ReadWrite>> {
 		return .success(values)
 	}
 
-	func delete<Model: PersistDB.Model & Identifiable>(_ type: Model.Type, with ids: [Model.ID]? = nil) async -> Result<[Model.ID]> where Model.RawIdentifier: Sendable {
+	func delete<Model: PersistDB.Model & Identifiable>(_ type: Model.Type, with ids: [Model.ID]? = nil) async -> Results<Model.ID> where Model.RawIdentifier: Sendable {
 		if let ids, ids.isEmpty {
 			return .success([])
 		}
@@ -60,7 +58,7 @@ public extension Database<Store<ReadWrite>> {
 		let predicate = ids.map { $0.contains(Model.idKeyPath) }
 		await store.delete(.init(predicate)).complete()
 
-		let fields: Result<[IDFields<Model>]> = await fetch(where: predicate)
+		let fields: Results<IDFields<Model>> = await fetch(where: predicate)
 		return await fields.map { $0.map(\.id) }
 	}
 }
