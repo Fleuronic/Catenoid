@@ -9,7 +9,7 @@ import protocol Catena.ResultProviding
 import protocol Schemata.AnyModel
 import protocol Identity.Identifiable
 
-public protocol Database<Store>: Storage, ResultProviding, Sendable where StorageError == Never {
+public protocol Database<Store>: Storage, ResultProviding, Sendable where Error == StorageError, StorageError == Never {
 	associatedtype Store
 
 	var store: Store { get }
