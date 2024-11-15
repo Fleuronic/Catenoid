@@ -1,8 +1,7 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
-import Schemata
-
 import protocol Catena.Fields
+import protocol Schemata.Model
 import protocol PersistDB.ModelProjection
 
 public protocol Fields<Model>: Catena.Fields, ModelProjection where Model == Self.Model {

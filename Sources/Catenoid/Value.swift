@@ -3,6 +3,13 @@
 import struct ReactiveSwift.SignalProducer
 import protocol ReactiveSwift.Disposable
 
+public extension Result where Success == Never {
+	@available(*, unavailable)
+	var value: Never {
+		fatalError()
+	}
+}
+
 public extension Result where Failure == Never {
 	var value: Success {
 		switch self {

@@ -1,4 +1,5 @@
 {
+  "originHash" : "1ed678d14ae07581c384555d4083c20799492838cee167f814860ed93bab20e7",
   "pins" : [
     {
       "identity" : "catena",
@@ -6,7 +7,7 @@
       "location" : "https://github.com/Fleuronic/Catena",
       "state" : {
         "branch" : "main",
-        "revision" : "0886450dc5cc4d2607cd63ce95772e6fb29d7a9f"
+        "revision" : "ab0376e6d2e8510e321a579b3c6dd1a27e75dd0a"
       }
     },
     {
@@ -33,7 +34,7 @@
       "location" : "https://github.com/Fleuronic/PersistDB",
       "state" : {
         "branch" : "master",
-        "revision" : "0d57b231aeef08f015a54e021e46d74b19db761e"
+        "revision" : "c9541a0b705720de5b7acf245b4b434dd4f53320"
       }
     },
     {
@@ -42,7 +43,7 @@
       "location" : "https://github.com/Fleuronic/ReactiveSwift",
       "state" : {
         "branch" : "main",
-        "revision" : "7b922072ceeb867e2550d4a76558763b16daa6a6"
+        "revision" : "d802d180182ca8980f21f74f3a5b62ef0cb1a959"
       }
     },
     {
@@ -55,5 +56,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

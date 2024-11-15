@@ -4,6 +4,8 @@ import struct Identity.Identifier
 import struct Schemata.Value
 import struct Schemata.AnyValue
 import struct Foundation.UUID
+import protocol Catena.Identifying
+import protocol Identity.Identifiable
 import protocol Schemata.ModelValue
 import protocol Schemata.AnyModelValue
 
@@ -53,3 +55,10 @@ extension UUID: StringEncodable {
 	public static func encode(with string: String) -> Self { .init(uuidString: string)! }
 }
 
+// MARK: -
+public enum UngenerableIdentifier<Model: Identifiable>: Identifying {}
+
+// MARK: -
+public extension Identifiable {
+	typealias UngenerableID = UngenerableIdentifier<Self>
+}
