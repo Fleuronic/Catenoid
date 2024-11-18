@@ -1,7 +1,7 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
 public extension Sequence where Element: Sendable {
-	func asyncMap<NewElement>(_ transform: (Element) async throws -> NewElement) async rethrows -> [NewElement] {
+	func serialMap<NewElement>(_ transform: (Element) async throws -> NewElement) async rethrows -> [NewElement] {
 		var values: [NewElement] = []
 		for element in self {
 			try await values.append(transform(element))
@@ -17,7 +17,7 @@ public extension Sequence where Element: Sendable {
 			}
 		}
 
-		return try await tasks.asyncMap { task in
+		return try await tasks.serialMap { task in
 			try await task.value
 		}
 	}
