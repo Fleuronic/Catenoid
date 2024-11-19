@@ -3,11 +3,6 @@
 import protocol Schemata.ModelProjection
 import protocol Catena.Representable
 
-public protocol Row: Representable, Fields {}
-
-// MARK: -
-public protocol RowIdentifying where IdentifyingRow.Model: Representable {
-	associatedtype IdentifyingRow: Row
-
-	static func identified(from row: IdentifyingRow?) -> IdentifyingRow.Model?
+public protocol Row: Representable, Fields {
+	init(from representable: some Representable<Value, IdentifiedValue>)
 }

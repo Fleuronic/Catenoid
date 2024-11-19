@@ -4,6 +4,7 @@ import PersistDB
 
 import struct Catena.IDFields
 import struct Schemata.Projection
+import struct Identity.Identifier
 import protocol Catena.Fields
 import protocol Catena.ResultProviding
 import protocol Schemata.AnyModel
@@ -37,7 +38,7 @@ public extension Database<Store<ReadWrite>> {
 			order: [],
 			groupedBy: .init(.init(Fields.Model.idKeyPath))
 		)
-		
+
 		guard let resultSet: ResultSet<Fields.Model.ID, Fields> = await store.fetch(query).value else {
 			return .success([])
 		}
@@ -51,15 +52,26 @@ public extension Database<Store<ReadWrite>> {
 		return .success(values)
 	}
 
-	func delete<Model: PersistDB.Model & Identifiable>(_ type: Model.Type, with ids: [Model.ID]? = nil) async -> Results<Model.ID> where Model.RawIdentifier: Sendable {
+	func delete<Model: PersistDB.Model & Identifiable>(_ type: Model.Type) async -> Result<[Model.ID], StorageError> where Model.RawIdentifier: Sendable {
+		await delete(Model.self, with: nil)
+	}
+
+	func delete<Model: PersistDB.Model & Identifiable>(with ids: [Identifier<Model>]) async -> Result<[Model.ID], StorageError> where Model.RawIdentifier: Sendable {
+		await delete(Model.self, with: ids)
+	}
+}
+
+// MARK: -
+private extension Database<Store<ReadWrite>> {
+	func delete<Model: PersistDB.Model & Identifiable>(_ type: Model.Type, with ids: [Model.ID]?) async -> Results<Model.ID> where Model.RawIdentifier: Sendable {
 		if let ids, ids.isEmpty {
 			return .success([])
 		}
 
 		let predicate = ids.map { $0.contains(Model.idKeyPath) }
-		await store.delete(.init(predicate)).complete()
-
 		let fields: Results<IDFields<Model>> = await fetch(where: predicate)
+
+		await store.delete(.init(predicate)).complete()
 		return await fields.map { $0.map(\.id) }
 	}
 }
