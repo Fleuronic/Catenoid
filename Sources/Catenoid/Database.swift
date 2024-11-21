@@ -72,6 +72,11 @@ private extension Database<Store<ReadWrite>> {
 		let fields: Results<IDFields<Model>> = await fetch(where: predicate)
 
 		await store.delete(.init(predicate)).complete()
+
+		#if swift(>=6.0)
 		return await fields.map { $0.map(\.id) }
+		#else
+		return fields.map { $0.map(\.id) }
+		#endif
 	}
 }

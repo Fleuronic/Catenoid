@@ -11,7 +11,9 @@ public extension Result where Success == Never {
 
 public extension Result where Failure == Never {
 	var value: Success {
-		self.get()
+		switch self {
+		case let .success(value): value
+		}
 	}
 }
 
