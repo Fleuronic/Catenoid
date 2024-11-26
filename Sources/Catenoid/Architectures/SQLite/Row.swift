@@ -2,7 +2,6 @@
 
 import protocol Schemata.ModelProjection
 import protocol Catena.Representable
+import protocol Identity.Identifiable
 
-public protocol Row: Representable, Fields {
-	init(from representable: some Representable<Value, IdentifiedValue>)
-}
+public protocol Row: Fields, Representable {}

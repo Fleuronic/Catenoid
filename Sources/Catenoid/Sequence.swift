@@ -1,24 +1,54 @@
-// Copyright © Fleuronic LLC. All rights reserved.
+import Foundation
+
+public enum AsyncIterationMode: Sendable {
+	case serial
+	case concurrent(priority: TaskPriority?, parallelism: Int)
+
+	public static let concurrent = concurrent(priority: nil, parallelism: ProcessInfo.processInfo.processorCount)
+}
 
 public extension Sequence where Element: Sendable {
-	func serialMap<NewElement>(_ transform: (Element) async throws -> NewElement) async rethrows -> [NewElement] {
-		var values: [NewElement] = []
-		for element in self {
-			try await values.append(transform(element))
-		}
+	func map<NewElement: Sendable>(
+		mode: AsyncIterationMode = .concurrent,
+		_ transform: @Sendable @escaping (Element) async throws -> NewElement
+	) async rethrows -> [NewElement] {
+		switch mode {
 
-		return values
-	}
-
-	func concurrentMap<NewElement: Sendable>(_ transform: @Sendable @escaping (Element) async throws -> NewElement) async rethrows -> [NewElement] {
-		let tasks = map { element in
-			Task {
-				try await transform(element)
+		case .serial:
+			var result: [NewElement] = []
+			result.reserveCapacity(underestimatedCount)
+			for element in self {
+				result.append(try await transform(element))
 			}
-		}
+			return result
 
-		return try await tasks.serialMap { task in
-			try await task.value
+		case let .concurrent(priority, parallelism):
+			return try await withThrowingTaskGroup(of: (Int, NewElement).self) { group in
+				var i = 0
+				var iterator = self.makeIterator()
+				var results = [NewElement?]()
+				results.reserveCapacity(underestimatedCount)
+
+				func submitTask() throws {
+					try Task.checkCancellation()
+					if let element = iterator.next() {
+						results.append(nil)
+						group.addTask(priority: priority) { [i] in (i, try await transform(element)) }
+						i += 1
+					}
+				}
+
+				// add initial tasks
+				for _ in 0..<parallelism { try submitTask() }
+
+				// submit more tasks, as each one completes, until we run out of work
+				while let (index, result) = try await group.next() {
+					results[index] = result
+					try submitTask()
+				}
+
+				return results.compactMap { $0 }
+			}
 		}
 	}
 }

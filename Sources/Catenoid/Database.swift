@@ -27,7 +27,7 @@ public extension Database<Store<ReadWrite>> {
 	}
 
 	// MARK: Storage
-	func insert<Model: Catenoid.Model>(_ model: Model) async -> SingleResult<Model> where Model.ID == Model.IdentifiedModel.ID {
+	@Sendable func insert<Model: Catenoid.Model>(_ model: Model) async -> SingleResult<Model> where Model.ID == Model.IdentifiedModel.ID {
 		let valueSet = model.valueSet.update(with: [Model.IdentifiedModel.idKeyPath == model.id])
 		return await .success(store.insert(.init(valueSet)).map { _ in model }.value!)
 	}
@@ -52,6 +52,17 @@ public extension Database<Store<ReadWrite>> {
 		return .success(values)
 	}
 
+
+	func delete<Model: PersistDB.Model & Identifiable>(_ type: Model.Type) async -> Result<[Model.ID], StorageError> where Model.RawIdentifier: Sendable {
+		await delete(Model.self, with: nil)
+	}
+
+	func delete<Model: PersistDB.Model & Identifiable>(with ids: [Identifier<Model>]) async -> Result<[Model.ID], StorageError> where Model.RawIdentifier: Sendable {
+		await delete(Model.self, with: ids)
+	}
+}
+
+private extension Database<Store<ReadWrite>> {
 	func delete<Model: PersistDB.Model & Identifiable>(_ type: Model.Type, with ids: [Model.ID]?) async -> Results<Model.ID> where Model.RawIdentifier: Sendable {
 		if let ids, ids.isEmpty {
 			return .success([])
