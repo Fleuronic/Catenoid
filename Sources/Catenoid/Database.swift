@@ -52,7 +52,6 @@ public extension Database<Store<ReadWrite>> {
 		return .success(values)
 	}
 
-
 	func delete<Model: PersistDB.Model & Identifiable>(_ type: Model.Type) async -> Result<[Model.ID], StorageError> where Model.RawIdentifier: Sendable {
 		await delete(Model.self, with: nil)
 	}
@@ -62,6 +61,7 @@ public extension Database<Store<ReadWrite>> {
 	}
 }
 
+// MARK: -
 private extension Database<Store<ReadWrite>> {
 	func delete<Model: PersistDB.Model & Identifiable>(_ type: Model.Type, with ids: [Model.ID]?) async -> Results<Model.ID> where Model.RawIdentifier: Sendable {
 		if let ids, ids.isEmpty {
