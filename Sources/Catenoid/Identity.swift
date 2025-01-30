@@ -11,8 +11,9 @@ import protocol PersistDB.Model
 import protocol PersistDB.ModelProjection
 
 public extension Identifiable {
-	typealias InvalidID = InvalidIdentifier<Self>
-	typealias UngenerableID = UngenerableIdentifier<Self>
+	typealias InvalidID = EmptyIdentifier<Self>
+	typealias UngenerableID = EmptyIdentifier<Self>
+	typealias UngenerableIDs = EmptyIdentifiers<Self>
 }
 
 // MARK: -
@@ -31,14 +32,12 @@ extension IDFields: Schemata.ModelProjection, PersistDB.ModelProjection where Mo
 }
 
 // MARK: -
-
-// MARK: -
-public enum InvalidIdentifier<Model: Identifiable>: Identifying {}
-
-// MARK: -
-public enum UngenerableIdentifier<Model: Identifiable>: Identifying {}
-
-// MARK: -
 public extension Identifier where Value.RawIdentifier == UUID {
 	static var random: Self { .init(rawValue: .init()) }
 }
+
+// MARK: -
+public enum EmptyIdentifier<T: Identifiable>: Identifying {}
+
+// MARK: -
+public enum EmptyIdentifiers<T: Identifiable>: Identifying {}
