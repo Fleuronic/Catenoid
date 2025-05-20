@@ -1,4 +1,5 @@
 {
+  "originHash" : "325444d5d238bbb2418819ed292f3dffbd29f26503f8ff5d714dc3269b66a905",
   "pins" : [
     {
       "identity" : "catena",
@@ -6,7 +7,7 @@
       "location" : "https://github.com/Fleuronic/Catena",
       "state" : {
         "branch" : "main",
-        "revision" : "711584a4c986e83c49a0405f45f1412aba57c45d"
+        "revision" : "a3c180a72356e20d9156915ece02a0eee050de1f"
       }
     },
     {
@@ -21,39 +22,39 @@
     {
       "identity" : "identity",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Fleuronic/Identity",
+      "location" : "https://github.com/jordanekay/Identity",
       "state" : {
         "branch" : "master",
-        "revision" : "7a4dc7e961f8fd6df9c9c7fe07190b91c0c99e1b"
+        "revision" : "8764a54c8e5ef0d14f3dc2ec5c10223ed0411a4d"
       }
     },
     {
       "identity" : "persistdb",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Fleuronic/PersistDB",
+      "location" : "https://github.com/jordanekay/PersistDB",
       "state" : {
         "branch" : "master",
-        "revision" : "c9541a0b705720de5b7acf245b4b434dd4f53320"
+        "revision" : "6ec3569d31ae6996d2c2256cce6ab0c528c15749"
       }
     },
     {
       "identity" : "reactiveswift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Fleuronic/ReactiveSwift",
+      "location" : "https://github.com/ReactiveCocoa/ReactiveSwift.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "d802d180182ca8980f21f74f3a5b62ef0cb1a959"
+        "branch" : "swift-concurrency",
+        "revision" : "3d40187c982346352d0adbe6b38e0e3d53fddc95"
       }
     },
     {
       "identity" : "schemata",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Fleuronic/Schemata",
+      "location" : "https://github.com/jordanekay/Schemata",
       "state" : {
         "branch" : "master",
         "revision" : "d50bff691be79b0334e17b394de7dc13528d3944"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

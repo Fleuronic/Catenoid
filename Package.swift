@@ -19,9 +19,9 @@ let package = Package(
 	],
 	dependencies: [
 		.package(url: "https://github.com/Fleuronic/Catena", branch: "main"),
-		.package(url: "https://github.com/Fleuronic/Schemata", branch: "master"),
-		.package(url: "https://github.com/Fleuronic/PersistDB", branch: "master"),
-		.package(url: "https://github.com/Fleuronic/ReactiveSwift", branch: "main")
+		.package(url: "https://github.com/jordanekay/Schemata", branch: "master"),
+		.package(url: "https://github.com/jordanekay/PersistDB", branch: "master"),
+		.package(url: "https://github.com/ReactiveCocoa/ReactiveSwift.git", branch: "swift-concurrency")
 	],
 	targets: [
 		.target(
