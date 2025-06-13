@@ -7,7 +7,7 @@ public enum AsyncIterationMode: Sendable {
 	public static let concurrent = concurrent(priority: nil, parallelism: ProcessInfo.processInfo.processorCount)
 }
 
-public extension Sequence where Element: Sendable {
+public extension Sequence where Self: SendableMetatype, Element: Sendable {
 	func map<NewElement: Sendable>(
 		mode: AsyncIterationMode = .concurrent,
 		_ transform: @Sendable @escaping (Element) async throws -> NewElement
