@@ -22,8 +22,9 @@ public extension Storage {
 		await .success(models.map { await insert($0) }.map(\.value))
 	}
 
-	func fetch<Fields: Catenoid.Fields>(with id: Fields.Model.ID) async -> Result<[Fields], StorageError> {
-		await fetch(where: Fields.Model.idKeyPath == id)
+	func fetch<Fields: Catenoid.Fields>(with id: Fields.Model.ID) async -> Result<Fields, StorageError> {
+		let result: Result<[Fields], StorageError> = await fetch(where: Fields.Model.idKeyPath == id)
+		return result.map(\.first!)
 	}
 
 	func fetch<Fields: Catenoid.Fields>(with ids: [Fields.Model.ID]) async -> Result<[Fields], StorageError> {
