@@ -8,8 +8,7 @@ import protocol Schemata.AnyModel
 
 public extension Store<ReadWrite> {
 	static func open(for types: [any AnyModel.Type]) async throws -> Store<ReadWrite> {
-		print(try url)
-		return try await Self
+		try await Self
 			.open(libraryNamed: .database, for: types)
 			.asyncThrowingStream
 			.value!

@@ -3,7 +3,6 @@
 import PersistDB
 
 import struct Catena.IDFields
-import struct Schemata.Projection
 import struct Identity.Identifier
 import protocol Catena.Fields
 import protocol Catena.ResultProviding
