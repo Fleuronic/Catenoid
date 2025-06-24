@@ -1,5 +1,6 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
+import Schemata
 import PersistDB
 
 import struct Identity.Identifier
@@ -10,28 +11,30 @@ import protocol Catena.Fields
 public protocol Storage: Sendable {
 	associatedtype StorageError: Error
 
-	func insert<Model: Catenoid.Model>(_ model: Model) async -> Result<Model, StorageError> where Model.ID == Model.IdentifiedModel.ID
-	func fetch<Fields: Catenoid.Fields>(where predicate: Predicate<Fields.Model>?) async -> Result<[Fields], StorageError>
-	func delete<Model: PersistDB.Model & Identifiable>(_ type: Model.Type) async -> Result<[Model.ID], StorageError>
-	func delete<Model: PersistDB.Model & Identifiable>(with ids: [Identifier<Model>]) async -> Result<[Model.ID], StorageError>
+	func insert<Model: Catenoid.Model>(_ model: Model) async -> Result<Model.ID, StorageError> where Model.ID == Model.IdentifiedModel.ID, Model.IdentifiedModel.RawIdentifier: Codable
+	func insert<Model: Catenoid.Model>(_ models: [Model]) async -> Result<[Model.ID], StorageError> where Model.ID == Model.IdentifiedModel.ID, Model.IdentifiedModel.RawIdentifier: Codable
+	func fetch<Fields: Catenoid.Fields & Decodable>(where predicate: Predicate<Fields.Model>?) async -> Result<[Fields], StorageError>
+	func delete<Model: PersistDB.Model & Identifiable>(where predicate: Predicate<Model>?) async -> Result<[Model.ID], StorageError> where Model.RawIdentifier: Codable
 }
 
 // MARK: -
 public extension Storage {
-	func insert<Model: Catenoid.Model>(_ models: [Model]) async -> Result<[Model], StorageError> where Model.ID == Model.IdentifiedModel.ID, StorageError == Never {
-		await .success(models.map { await insert($0) }.map(\.value))
+	func fetch<Fields: Catenoid.Fields & Decodable>() async -> Result<[Fields], StorageError> {
+		await fetch(where: nil)
 	}
 
-	func fetch<Fields: Catenoid.Fields>(with id: Fields.Model.ID) async -> Result<Fields, StorageError> {
+	func fetch<Fields: Catenoid.Fields & Decodable>(with id: Fields.Model.ID) async -> Result<Fields, StorageError> {
 		let result: Result<[Fields], StorageError> = await fetch(where: Fields.Model.idKeyPath == id)
 		return result.map(\.first!)
 	}
 
-	func fetch<Fields: Catenoid.Fields>(with ids: [Fields.Model.ID]) async -> Result<[Fields], StorageError> {
+	func fetch<Fields: Catenoid.Fields & Decodable>(with ids: [Fields.Model.ID]) async -> Result<[Fields], StorageError> {
 		await fetch(where: ids.contains(Fields.Model.idKeyPath))
 	}
 
-	func delete<Model: PersistDB.Model & Identifiable>(with id: Identifier<Model>) async -> Result<[Model.ID], StorageError> {
-		await delete(with: [id])
+	func delete<Model: PersistDB.Model & Identifiable>(_ type: Model.Type) async -> Result<[Model.ID], StorageError> where Model.RawIdentifier: Codable {
+		await delete(where: nil as Predicate<Model>?)
 	}
+
+	// TODO
 }

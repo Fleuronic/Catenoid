@@ -1,5 +1,6 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
+import Schemata
 import PersistDB
 
 import struct Catena.IDFields
@@ -26,9 +27,17 @@ public extension Database<Store<ReadWrite>> {
 	}
 
 	// MARK: Storage
-	@Sendable func insert<Model: Catenoid.Model>(_ model: Model) async -> SingleResult<Model> where Model.ID == Model.IdentifiedModel.ID {
-		let valueSet = model.valueSet.update(with: [Model.IdentifiedModel.idKeyPath == model.id])
-		return await .success(store.insert(.init(valueSet)).map { _ in model }.value!)
+	func insert<Model: Catenoid.Model>(_ model: Model) async -> SingleResult<Model.ID> where Model.ID == Model.IdentifiedModel.ID {
+		var valueSet = model.valueSet
+		if let id = model.identifiedModelID {
+			valueSet = valueSet.update(with: [Model.IdentifiedModel.idKeyPath == id])
+		}
+
+		return await .success(store.insert(.init(valueSet)).value!)
+	}
+
+	func insert<Model: Catenoid.Model>(_ models: [Model]) async -> Results<Model.ID> where Model.ID == Model.IdentifiedModel.ID {
+		await .success(models.map { await insert($0).value })
 	}
 
 	func fetch<Fields: Catenoid.Fields>(where predicate: Predicate<Fields.Model>? = nil) async -> Results<Fields> {
@@ -51,26 +60,11 @@ public extension Database<Store<ReadWrite>> {
 		return .success(values)
 	}
 
-	func delete<Model: PersistDB.Model & Identifiable>(_ type: Model.Type) async -> Result<[Model.ID], StorageError> where Model.RawIdentifier: Sendable {
-		await delete(Model.self, with: nil)
-	}
-
-	func delete<Model: PersistDB.Model & Identifiable>(with ids: [Identifier<Model>]) async -> Result<[Model.ID], StorageError> where Model.RawIdentifier: Sendable {
-		await delete(Model.self, with: ids)
-	}
-}
-
-// MARK: -
-private extension Database<Store<ReadWrite>> {
-	func delete<Model: PersistDB.Model & Identifiable>(_ type: Model.Type, with ids: [Model.ID]?) async -> Results<Model.ID> where Model.RawIdentifier: Sendable {
-		if let ids, ids.isEmpty {
-			return .success([])
-		}
-
-		let predicate = ids.map { $0.contains(Model.idKeyPath) }
+	func delete<Model: PersistDB.Model & Identifiable>(where predicate: Predicate<Model>? = nil) async -> Results<Model.ID> where Model.RawIdentifier: Sendable {
 		let fields: Results<IDFields<Model>> = await fetch(where: predicate)
 
 		await store.delete(.init(predicate)).complete()
 		return fields.map { $0.map(\.id) }
 	}
 }
+
