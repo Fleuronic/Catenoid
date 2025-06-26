@@ -1,8 +1,8 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
-import protocol Schemata.ModelProjection
+import Schemata
+import Identity
 import protocol Catena.Representable
-import protocol Identity.Identifiable
 
 public protocol Row: Model, Representable {}
 

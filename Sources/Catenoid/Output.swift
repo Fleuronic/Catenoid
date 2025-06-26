@@ -1,3 +1,5 @@
+// Copyright © Fleuronic LLC. All rights reserved.
+
 @preconcurrency import ReactiveSwift
 import protocol Catena.Output
 

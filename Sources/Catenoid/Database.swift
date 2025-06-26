@@ -2,13 +2,11 @@
 
 import Schemata
 import PersistDB
-
+import Identity
 import struct Catena.IDFields
 import struct Identity.Identifier
 import protocol Catena.Fields
 import protocol Catena.ResultProviding
-import protocol Schemata.AnyModel
-import protocol Identity.Identifiable
 
 public protocol Database<Store>: ResultProviding, Sendable where Error == Never {
 	associatedtype Store

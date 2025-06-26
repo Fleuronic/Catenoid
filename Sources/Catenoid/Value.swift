@@ -1,6 +1,6 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
-import struct ReactiveSwift.SignalProducer
+import ReactiveSwift
 
 public extension Result where Success == Never {
 	@available(*, unavailable)
