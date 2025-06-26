@@ -1,7 +1,7 @@
 @preconcurrency import ReactiveSwift
 import protocol Catena.Output
 
-extension SignalProducer: Catena.Output {
+extension SignalProducer: Catena.Output, @unchecked Swift.Sendable {
 	public typealias Success = Value
 	public typealias Failure = Error
 }

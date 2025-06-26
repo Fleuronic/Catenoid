@@ -44,7 +44,7 @@ extension Identifier: Schemata.AnyModelValue where Value.RawIdentifier: ModelVal
 extension Identifier: Schemata.ModelValue where Value.RawIdentifier: ModelValue & StringEncodable {
 	public static var value: Schemata.Value<Value.RawIdentifier.Encoded, Self> {
 		Value.RawIdentifier.value.bimap(
-			decode: Self.init(rawValue:),
+			decode: { Self(rawValue: $0) },
 			encode: \.rawValue
 		)
 	}

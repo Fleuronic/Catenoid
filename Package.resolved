@@ -7,7 +7,7 @@
       "location" : "https://github.com/Fleuronic/Catena",
       "state" : {
         "branch" : "main",
-        "revision" : "d8752bd810178c218656804ae0e8d9cae4fee6ae"
+        "revision" : "d871e0b9fd1574f6e03d1248daa04e3235e51005"
       }
     },
     {
@@ -34,7 +34,7 @@
       "location" : "https://github.com/jordanekay/PersistDB",
       "state" : {
         "branch" : "master",
-        "revision" : "6ec3569d31ae6996d2c2256cce6ab0c528c15749"
+        "revision" : "1fcce3a2e8d5ff8dcd52ab60a743bc0fb9f06c78"
       }
     },
     {
@@ -52,7 +52,7 @@
       "location" : "https://github.com/jordanekay/Schemata",
       "state" : {
         "branch" : "master",
-        "revision" : "d50bff691be79b0334e17b394de7dc13528d3944"
+        "revision" : "1c5443b01cd2fb9f25e63197cfe35b96ba9bd2fc"
       }
     }
   ],

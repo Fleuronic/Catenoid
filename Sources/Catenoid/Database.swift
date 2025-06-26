@@ -10,7 +10,7 @@ import protocol Catena.ResultProviding
 import protocol Schemata.AnyModel
 import protocol Identity.Identifiable
 
-public protocol Database<Store>: Storage, ResultProviding where Error == StorageError, StorageError == Never {
+public protocol Database<Store>: ResultProviding, Sendable where Error == Never {
 	associatedtype Store
 
 	var store: Store { get }
@@ -24,6 +24,19 @@ public protocol Database<Store>: Storage, ResultProviding where Error == Storage
 public extension Database<Store<ReadWrite>> {
 	static func createStore() async throws -> Store {
 		try await .open(for: types)
+	}
+
+	func fetch<Fields: Catenoid.Fields>() async -> Results<Fields> {
+		await fetch(where: nil)
+	}
+
+	func fetch<Fields: Catenoid.Fields>(with id: Fields.Model.ID) async -> SingleResult<Fields> {
+		let result: Results<Fields> = await fetch(where: Fields.Model.idKeyPath == id)
+		return result.map(\.first!)
+	}
+
+	func fetch<Fields: Catenoid.Fields>(with ids: [Fields.Model.ID]) async -> Results<Fields> {
+		await fetch(where: ids.contains(Fields.Model.idKeyPath))
 	}
 
 	// MARK: Storage
