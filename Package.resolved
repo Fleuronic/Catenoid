@@ -7,7 +7,7 @@
       "location" : "https://github.com/Fleuronic/Catena",
       "state" : {
         "branch" : "main",
-        "revision" : "d871e0b9fd1574f6e03d1248daa04e3235e51005"
+        "revision" : "4b8f563478ba7ff00ce8014b2ec54a6bdbbfbdfa"
       }
     },
     {
@@ -25,7 +25,7 @@
       "location" : "https://github.com/jordanekay/Identity",
       "state" : {
         "branch" : "master",
-        "revision" : "8764a54c8e5ef0d14f3dc2ec5c10223ed0411a4d"
+        "revision" : "ff9dfdf4df87ff0d7064d40bdc230c5e55f0bcbf"
       }
     },
     {
