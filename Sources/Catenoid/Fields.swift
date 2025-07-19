@@ -9,6 +9,17 @@ public protocol Fields<Model>: Catena.Fields, ModelProjection where Model == Sel
 }
 
 // MARK: -
-extension Fields {
-	public static func merge(lhs: Self, rhs: Self) -> Self { lhs }
+public extension Fields {
+	// MARK: Hashable
+	func hash(into hasher: inout Hasher) {
+		hasher.combine(id)
+	}
+
+	// MARK: Equatable
+	static func ==(lhs: Self, rhs: Self) -> Bool {
+		lhs.id == rhs.id
+	}
+
+	// MARK: Fields
+	static func merge(lhs: Self, rhs: Self) -> Self { lhs }
 }
