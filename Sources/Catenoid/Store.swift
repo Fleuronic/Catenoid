@@ -5,30 +5,23 @@ import PersistDB
 import Foundation
 
 public extension Store<ReadWrite> {
-	static func open(for types: [any AnyModel.Type]) async throws -> Store<ReadWrite> {
+	static func open(with name: String, for types: [any AnyModel.Type]) async throws -> Store<ReadWrite> {
 		try await Self
-			.open(libraryNamed: .database, for: types)
+			.open(libraryNamed: name, for: types)
 			.asyncThrowingStream
 			.value!
 	}
 
-	static func destroy() throws {
-		try FileManager.default.removeItem(at: url)
+	static func destroy(with name: String) throws {
+		try FileManager.default.removeItem(at: url(with: name))
 	}
 }
 
 // MARK: -
 private extension Store {
-	static var url: URL {
-		get throws {
-			try FileManager.default
-				.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-				.appendingPathComponent(.database)
-		}
+	static func url(with name: String) throws -> URL {
+		try FileManager.default
+			.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+			.appendingPathComponent(name)
 	}
-}
-
-// MARK: -
-private extension String {
-	static let database = "Database"
 }
