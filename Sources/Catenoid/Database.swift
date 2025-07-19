@@ -20,8 +20,8 @@ public protocol Database<Store>: ResultProviding, Sendable where Error == Never 
 
 // MARK: -
 public extension Database<Store<ReadWrite>> {
-	static func createStore() async throws -> Store {
-		try await .open(for: types)
+	static func createStore(named name: String) async throws -> Store {
+		try await .open(with: name, for: types)
 	}
 
 	func fetch<Fields: Catenoid.Fields>() async -> Results<Fields> {
