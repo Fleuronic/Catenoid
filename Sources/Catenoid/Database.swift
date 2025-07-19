@@ -38,15 +38,18 @@ public extension Database<Store<ReadWrite>> {
 	}
 
 	// MARK: Storage
+	@discardableResult
 	func insert<Model: Catenoid.Model>(_ model: Model) async -> SingleResult<Model.ID> where Model.ID == Model.IdentifiedModel.ID {
 		var valueSet = model.valueSet
 		if let id = model.identifiedModelID {
 			valueSet = valueSet.update(with: [Model.IdentifiedModel.idKeyPath == id])
+			await delete(where: Model.IdentifiedModel.idKeyPath == id)
 		}
 
 		return await .success(store.insert(.init(valueSet)).value!)
 	}
 
+	@discardableResult
 	func insert<Model: Catenoid.Model>(_ models: [Model]) async -> Results<Model.ID> where Model.ID == Model.IdentifiedModel.ID {
 		await .success(models.map { await insert($0).value })
 	}
@@ -71,6 +74,7 @@ public extension Database<Store<ReadWrite>> {
 		return .success(values)
 	}
 
+	@discardableResult
 	func delete<Model: PersistDB.Model & Identifiable>(where predicate: Predicate<Model>? = nil) async -> Results<Model.ID> where Model.RawIdentifier: Sendable {
 		let fields: Results<IDFields<Model>> = await fetch(where: predicate)
 
@@ -78,4 +82,3 @@ public extension Database<Store<ReadWrite>> {
 		return fields.map { $0.map(\.id) }
 	}
 }
-
