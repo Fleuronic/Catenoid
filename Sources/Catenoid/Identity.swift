@@ -4,12 +4,13 @@ import Identity
 import Schemata
 import PersistDB
 import Foundation
+import enum Catena.EmptyIdentifier
+import enum Catena.EmptyIdentifiers
 import struct Catena.IDFields
 import protocol Catena.Identifying
 import protocol Catena.StringEncodable
 
 public extension Identifiable {
-	typealias InvalidID = EmptyIdentifier<Self>
 	typealias UngenerableID = EmptyIdentifier<Self>
 	typealias UngenerableIDs = EmptyIdentifiers<Self>
 }
@@ -54,9 +55,3 @@ extension Identifier: Schemata.ModelValue where Value.RawIdentifier: ModelValue 
 public extension Identifier where Value.RawIdentifier == UUID {
 	static var random: Self { .init(rawValue: .init()) }
 }
-
-// MARK: -
-public enum EmptyIdentifier<Identified: Identifiable>: Identifying {}
-
-// MARK: -
-public enum EmptyIdentifiers<Identified: Identifiable>: Identifying {}
