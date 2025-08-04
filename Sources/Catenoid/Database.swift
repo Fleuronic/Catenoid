@@ -51,7 +51,7 @@ public extension Database<Store<ReadWrite>> {
 
 	@discardableResult
 	func insert<Model: Catenoid.Model>(_ models: [Model]) async -> Results<Model.ID> where Model.ID == Model.IdentifiedModel.ID {
-		await .success(models.map { await insert($0).value })
+		await .success(models.asyncMap { await insert($0).value })
 	}
 
 	func fetch<Fields: Catenoid.Fields>(where predicate: Predicate<Fields.Model>? = nil) async -> Results<Fields> {
