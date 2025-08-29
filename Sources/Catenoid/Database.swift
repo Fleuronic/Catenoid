@@ -51,7 +51,24 @@ public extension Database<Store<ReadWrite>> {
 
 	@discardableResult
 	func insert<Model: Catenoid.Model>(_ models: [Model]) async -> Results<Model.ID> where Model.ID == Model.IdentifiedModel.ID {
-		await .success(models.asyncMap { await insert($0).value })
+		let valueSets = models.map { model in
+			var valueSet = model.valueSet
+			if let id = model.identifiedModelID {
+				valueSet = valueSet.update(with: [Model.IdentifiedModel.idKeyPath == id])
+			}
+			
+			return valueSet
+		}
+		
+		let ids = models.compactMap(\.identifiedModelID)
+		await delete(where: ids.contains(Model.IdentifiedModel.idKeyPath))
+
+		var values: [Model.ID] = []
+		for valueSet in valueSets {
+			await values.append(store.insert(.init(valueSet)).value!)
+		}
+		
+		return .success(values)
 	}
 
 	func fetch<Fields: Catenoid.Fields>(where predicate: Predicate<Fields.Model>? = nil) async -> Results<Fields> {
