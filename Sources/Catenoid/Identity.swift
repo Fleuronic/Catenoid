@@ -8,6 +8,7 @@ import enum Catena.EmptyIdentifier
 import enum Catena.EmptyIdentifiers
 import struct Catena.IDFields
 import protocol Catena.Identifying
+import protocol Catena.IntEncodable
 import protocol Catena.StringEncodable
 
 public extension Identifiable {
@@ -20,7 +21,6 @@ extension IDFields: Fields where Model: PersistDB.Model {
 	public static func merge(lhs: Self, rhs: Self) -> Self { lhs }
 }
 
-// MARK: -
 extension IDFields: Schemata.ModelProjection, PersistDB.ModelProjection where Model: PersistDB.Model {
 	public static var projection: Schemata.Projection<Model, Self> {
 		.init(
@@ -30,28 +30,32 @@ extension IDFields: Schemata.ModelProjection, PersistDB.ModelProjection where Mo
 	}
 }
 
-extension Identifier: Schemata.AnyModelValue where Value.RawIdentifier: ModelValue & StringEncodable {
+// MARK: -
+extension Identifier: Schemata.AnyModelValue {
 	public static var anyValue: AnyValue {
-		.init(
-			String.value.bimap(
-				decode: { Self(rawValue: Value.RawIdentifier.encode(with: $0)) },
-				encode: \.description
+		if Value.RawIdentifier.self is any ExpressibleByIntegerLiteral {
+			.init(
+				Int.value.bimap(
+					decode: { Self(rawValue: $0 as! Value.RawIdentifier) },
+					encode: { $0.rawValue as! Int }
+				)
 			)
-		)
+		} else {
+			.init(
+				String.value.bimap(
+					decode: { Self(rawValue: $0 as! Value.RawIdentifier) },
+					encode: \.description
+				)
+			)
+		}
 	}
 }
 
-// MARK: -
-extension Identifier: Schemata.ModelValue where Value.RawIdentifier: ModelValue & StringEncodable {
+extension Identifier: Schemata.ModelValue where Value.RawIdentifier: ModelValue {
 	public static var value: Schemata.Value<Value.RawIdentifier.Encoded, Self> {
 		Value.RawIdentifier.value.bimap(
 			decode: { Self(rawValue: $0) },
 			encode: \.rawValue
 		)
 	}
-}
-
-// MARK: -
-public extension Identifier where Value.RawIdentifier == UUID {
-	static var random: Self { .init(rawValue: .init()) }
 }
