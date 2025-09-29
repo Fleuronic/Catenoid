@@ -8,8 +8,6 @@ import enum Catena.EmptyIdentifier
 import enum Catena.EmptyIdentifiers
 import struct Catena.IDFields
 import protocol Catena.Identifying
-import protocol Catena.IntEncodable
-import protocol Catena.StringEncodable
 
 public extension Identifiable {
 	typealias UngenerableID = EmptyIdentifier<Self>
