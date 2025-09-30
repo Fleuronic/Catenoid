@@ -45,10 +45,10 @@ extension Identifier: Schemata.AnyModelValue {
 					encode: \.description
 				)
 			)
-		} else if Value.RawIdentifier.self == UUID.self {
+		} else {
 			.init(
 				String.value.bimap(
-					decode: { Self(rawValue: UUID(uuidString: $0 as! String) as! Value.RawIdentifier) },
+					decode: { Self(rawValue: UUID(uuidString: $0) as! Value.RawIdentifier) },
 					encode: \.description
 				)
 			)
