@@ -31,7 +31,7 @@ extension IDFields: Schemata.ModelProjection, PersistDB.ModelProjection where Mo
 // MARK: -
 extension Identifier: Schemata.AnyModelValue {
 	public static var anyValue: AnyValue {
-		if Value.RawIdentifier.self is any ExpressibleByIntegerLiteral {
+		if Value.RawIdentifier.self == Int.self {
 			.init(
 				Int.value.bimap(
 					decode: { Self(rawValue: $0 as! Value.RawIdentifier) },
