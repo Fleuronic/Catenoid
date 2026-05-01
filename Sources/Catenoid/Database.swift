@@ -1,12 +1,12 @@
 // Copyright © Fleuronic LLC. All rights reserved.
 
-import Schemata
-import PersistDB
-import Identity
-import struct Catena.IDFields
-import struct Identity.Identifier
 import protocol Catena.Fields
+import struct Catena.IDFields
 import protocol Catena.ResultProviding
+import Identity
+import struct Identity.Identifier
+import PersistDB
+import Schemata
 
 public protocol Database<Store>: ResultProviding, Sendable where Error == Never {
 	associatedtype Store
@@ -56,10 +56,10 @@ public extension Database<Store<ReadWrite>> {
 			if let id = model.identifiedModelID {
 				valueSet = valueSet.update(with: [Model.IdentifiedModel.idKeyPath == id])
 			}
-			
+
 			return valueSet
 		}
-		
+
 		let ids = models.compactMap(\.identifiedModelID)
 		await delete(where: ids.contains(Model.IdentifiedModel.idKeyPath))
 
@@ -67,8 +67,16 @@ public extension Database<Store<ReadWrite>> {
 		for valueSet in valueSets {
 			await values.append(store.insert(.init(valueSet)).value!)
 		}
-		
+
 		return .success(values)
+	}
+
+	@discardableResult
+	func update<Model: Catenoid.Model>(_ model: Model, with id: Model.ID) async -> SingleResult<Model.ID> where Model.ID == Model.IdentifiedModel.ID, Model.IdentifiedModel.RawIdentifier: Decodable {
+		var valueSet = model.valueSet
+		valueSet = valueSet.update(with: [Model.IdentifiedModel.idKeyPath == id])
+		await delete(where: Model.IdentifiedModel.idKeyPath == id)
+		return await .success(store.insert(.init(valueSet)).value!)
 	}
 
 	func fetch<Fields: Catenoid.Fields>(where predicate: Predicate<Fields.Model>? = nil) async -> Results<Fields> {
