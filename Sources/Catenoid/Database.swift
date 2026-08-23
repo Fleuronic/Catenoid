@@ -51,6 +51,8 @@ public extension Database<Store<ReadWrite>> {
 
 	@discardableResult
 	func insert<Model: Catenoid.Model>(_ models: [Model]) async -> Results<Model.ID> where Model.ID == Model.IdentifiedModel.ID {
+		guard !models.isEmpty else { return .success([]) }
+
 		let valueSets = models.map { model in
 			var valueSet = model.valueSet
 			if let id = model.identifiedModelID {
