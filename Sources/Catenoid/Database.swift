@@ -62,9 +62,6 @@ public extension Database<Store<ReadWrite>> {
 			return valueSet
 		}
 
-		let ids = models.compactMap(\.identifiedModelID)
-		await delete(where: ids.contains(Model.IdentifiedModel.idKeyPath))
-
 		var values: [Model.ID] = []
 		for valueSet in valueSets {
 			await values.append(store.insert(.init(valueSet)).value!)
