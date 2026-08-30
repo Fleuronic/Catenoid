@@ -40,41 +40,24 @@ public extension Database<Store<ReadWrite>> {
 	// MARK: Storage
 	@discardableResult
 	func insert<Model: Catenoid.Model>(_ model: Model) async -> SingleResult<Model.ID> where Model.ID == Model.IdentifiedModel.ID {
-		var valueSet = model.valueSet
-		if let id = model.identifiedModelID {
-			valueSet = valueSet.update(with: [Model.IdentifiedModel.idKeyPath == id])
-			await delete(where: Model.IdentifiedModel.idKeyPath == id)
-		}
-
-		return await .success(store.insert(.init(valueSet)).value!)
+		await .success(store.insert(.init(valueSet(for: model))).value!)
 	}
 
 	@discardableResult
 	func insert<Model: Catenoid.Model>(_ models: [Model]) async -> Results<Model.ID> where Model.ID == Model.IdentifiedModel.ID {
 		guard !models.isEmpty else { return .success([]) }
 
-		let valueSets = models.map { model in
-			var valueSet = model.valueSet
-			if let id = model.identifiedModelID {
-				valueSet = valueSet.update(with: [Model.IdentifiedModel.idKeyPath == id])
-			}
-
-			return valueSet
-		}
-
 		var values: [Model.ID] = []
-		for valueSet in valueSets {
-			await values.append(store.insert(.init(valueSet)).value!)
+		for model in models {
+			await values.append(store.insert(.init(valueSet(for: model))).value!)
 		}
 
 		return .success(values)
 	}
 
 	@discardableResult
-	func update<Model: Catenoid.Model>(_ model: Model, with id: Model.ID) async -> SingleResult<Model.ID> where Model.ID == Model.IdentifiedModel.ID, Model.IdentifiedModel.RawIdentifier: Decodable {
-		var valueSet = model.valueSet
-		valueSet = valueSet.update(with: [Model.IdentifiedModel.idKeyPath == id])
-		await delete(where: Model.IdentifiedModel.idKeyPath == id)
+	func update<Model: Catenoid.Model>(_ model: Model, with id: Model.ID) async -> SingleResult<Model.ID> where Model.ID == Model.IdentifiedModel.ID {
+		let valueSet = model.valueSet.update(with: [Model.IdentifiedModel.idKeyPath == id])
 		return await .success(store.insert(.init(valueSet)).value!)
 	}
 
@@ -104,5 +87,14 @@ public extension Database<Store<ReadWrite>> {
 
 		await store.delete(.init(predicate)).complete()
 		return fields.map { $0.map(\.id) }
+	}
+}
+
+// MARK: -
+private extension Database<Store<ReadWrite>> {
+	func valueSet<Model: Catenoid.Model>(for model: Model) -> ValueSet<Model.IdentifiedModel> where Model.ID == Model.IdentifiedModel.ID {
+		let valueSet = model.valueSet
+		guard let id = model.identifiedModelID else { return valueSet }
+		return valueSet.update(with: [Model.IdentifiedModel.idKeyPath == id])
 	}
 }
