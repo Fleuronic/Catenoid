@@ -62,10 +62,116 @@ public extension Database<Store<ReadWrite>> {
 	}
 
 	func fetch<Fields: Catenoid.Fields>(where predicate: Predicate<Fields.Model>? = nil) async -> Results<Fields> {
-		let query = Query(
+		await fetch(
+			where: predicate,
+			order: [],
+			limit: nil,
+			isUnordered: false
+		)
+	}
+
+	/// - important: Skips the model's default ordering so a limited fetch can stop at the first match.
+	func fetch<Fields: Catenoid.Fields>(
+		where predicate: Predicate<Fields.Model>? = nil,
+		limit: Int
+	) async -> Results<Fields> {
+		await fetch(
+			where: predicate,
+			order: [],
+			limit: limit,
+			isUnordered: true
+		)
+	}
+
+	/// - important: `limit` caps ROWS, and a projection with array fields spans several rows per model,
+	///              so a limited fetch of one can return a partially merged value.
+	func fetch<Fields: Catenoid.Fields, Value>(
+		where predicate: Predicate<Fields.Model>? = nil,
+		sortedBy keyPath: KeyPath<Fields.Model, Value>,
+		ascending: Bool = true,
+		limit: Int? = nil
+	) async -> Results<Fields> {
+		await fetch(
+			where: predicate,
+			order: [.init(keyPath, ascending: ascending)],
+			limit: limit,
+			isUnordered: false
+		)
+	}
+
+	func countDistinct<Model: PersistDB.Model, Value>(
+		_ keyPath: KeyPath<Model, Value>,
+		where predicate: Predicate<Model>? = nil
+	) async -> SingleResult<Int> {
+		let query = Query<None, Model>()
+		let filtered = predicate.map(query.filter) ?? query
+
+		return .success(await store.fetch(filtered.countDistinct(keyPath)).value ?? 0)
+	}
+
+	/// - important: Distinct rows are collapsed by the database, so the count reflects values, not models.
+	func fetchAnonymous<Fields: Catenoid.AnonymousFields>(
+		where predicate: Predicate<Fields.Model>? = nil,
+		distinct: Bool = true
+	) async -> Results<Fields> {
+		var query = Query<None, Fields.Model>(
 			predicates: predicate.map { [$0] } ?? [],
 			order: [],
-			groupedBy: .init(.init(Fields.Model.idKeyPath))
+			groupedBy: .none,
+			isUnordered: true
+		)
+
+		if distinct {
+			query = query.distinct()
+		}
+
+		return .success(await store.fetch(anonymous: query).value ?? [])
+	}
+
+	func count<Model: PersistDB.Model>(
+		_ type: Model.Type,
+		where predicate: Predicate<Model>? = nil
+	) async -> SingleResult<Int> {
+		let query = Query<None, Model>()
+		let filtered = predicate.map(query.filter) ?? query
+
+		return .success(await store.fetch(filtered.count).value ?? 0)
+	}
+
+	/// - important: Distinct rows are collapsed by the database, so the count reflects values, not models.
+	func fetchAnonymous<Fields: Catenoid.AnonymousFields, Value>(
+		where predicate: Predicate<Fields.Model>? = nil,
+		distinct: Bool = true,
+		sortedBy keyPath: KeyPath<Fields.Model, Value>,
+		ascending: Bool = true,
+		limit: Int? = nil
+	) async -> Results<Fields> {
+		var query = Query<None, Fields.Model>(
+			predicates: predicate.map { [$0] } ?? [],
+			order: [.init(keyPath, ascending: ascending)],
+			groupedBy: .none,
+			limit: limit
+		)
+
+		if distinct {
+			query = query.distinct()
+		}
+
+		return .success(await store.fetch(anonymous: query).value ?? [])
+	}
+
+	private func fetch<Fields: Catenoid.Fields>(
+		where predicate: Predicate<Fields.Model>?,
+		order: [Ordering<Fields.Model>],
+		limit: Int?,
+		isUnordered: Bool
+	) async -> Results<Fields> {
+		let query = Query(
+			predicates: predicate.map { [$0] } ?? [],
+			order: order,
+			groupedBy: .init(.init(Fields.Model.idKeyPath)),
+			limit: limit,
+			isUnordered: isUnordered
 		)
 
 		guard let resultSet: ResultSet<Fields.Model.ID, Fields> = await store.fetch(query).value else {

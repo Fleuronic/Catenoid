@@ -19,7 +19,7 @@ extension IDFields: Fields where Model: PersistDB.Model {
 	public static func merge(lhs: Self, rhs: Self) -> Self { lhs }
 }
 
-extension IDFields: Schemata.ModelProjection, PersistDB.ModelProjection where Model: PersistDB.Model {
+extension IDFields: Schemata.ModelProjection, PersistDB.AnonymousProjection, PersistDB.ModelProjection where Model: PersistDB.Model {
 	public static var projection: Schemata.Projection<Model, Self> {
 		.init(
 			Self.init,
