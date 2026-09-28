@@ -20,6 +20,7 @@ extension SignalProducer where Value: Sendable {
 					continuation.finish()
 				case let .failed(error):
 					continuation.yield(.failure(error))
+					continuation.finish()
 				}
 			}
 
